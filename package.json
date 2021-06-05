@@ -1,0 +1,27 @@
+{
+  "name": "autowhatsapp",
+  "version": "1.0.0",
+  "description": "Programatically queue WhatsApp messages to be sent to clients.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node master/index.js",
+    "dev": "nodemon master/index.js",
+    "slave": "node slave/server.js"
+  },
+  "keywords": [
+    "whatsapp",
+    "auto"
+  ],
+  "author": "Gbolu Adeyemi",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bull": "^3.22.6",
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "http-status-codez": "^1.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
