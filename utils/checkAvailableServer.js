@@ -1,6 +1,7 @@
 const axios = require('axios').default;
 
-const slaves = ['http://35.190.201.121:80']
+const slaves = ['http://localhost:6000']
+// 35.190.201.121
 
 const checkAvailableServer = () => new Promise(async(resolve, reject) => {
     let index = 0;

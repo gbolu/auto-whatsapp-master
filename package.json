@@ -1,12 +1,11 @@
 {
-  "name": "autowhatsapp",
+  "name": "auto_whatsapp_omc_master",
   "version": "1.0.0",
-  "description": "Programatically queue WhatsApp messages to be sent to clients.",
-  "main": "index.js",
+  "description": "Programatically queue WhatsApp messages to be sent to slave servers for processing.",
+  "main": "server.js",
   "scripts": {
-    "start": "node master/index.js",
-    "dev": "nodemon master/index.js",
-    "slave": "node slave/server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "keywords": [
     "whatsapp",
@@ -16,10 +15,11 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.21.1",
-    "bull": "^3.22.6",
+    "bull": "^3.22.7",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
-    "http-status-codez": "^1.1.0"
+    "http-status-codez": "^1.1.0",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
