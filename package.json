@@ -4,7 +4,7 @@
   "description": "Programatically queue WhatsApp messages to be sent to slave servers for processing.",
   "main": "server.js",
   "scripts": {
-    "start": "pm2 start server.js --name anon-messenger-slave",
+    "start": "pm2 start server.js --name anon-messenger-master",
     "dev": "nodemon server.js"
   },
   "keywords": [
