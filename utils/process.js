@@ -7,7 +7,7 @@ const processor = function(job, done) {
         if(isAvailable !== false){
             axios.post(`${isAvailable}/addJob`, job.data)
             .then(response => {
-                console.log(`Job dispensed to slave: ${isAvailable}!`);
+                console.log(`Job ${job.id} dispensed to slave: ${isAvailable}!`);
                 return;
             })
             .catch(err => {
