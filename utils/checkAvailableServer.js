@@ -20,6 +20,8 @@ const checkAvailableServer = () => new Promise(async(resolve, reject) => {
         } catch (error) {
             console.log(error);
         }
+
+        index += 1;
     }
 
     resolve(isAvailable);
