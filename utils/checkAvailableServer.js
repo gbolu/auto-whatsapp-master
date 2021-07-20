@@ -22,6 +22,10 @@ const checkAvailableServer = () => new Promise(async(resolve, reject) => {
         }
 
         index += 1;
+
+        if(!found && index === slaves.length - 1){
+            index = 0;
+        }
     }
 
     resolve(isAvailable);
