@@ -1,7 +1,9 @@
 const axios = require('axios').default;
 
-const slaves = ['http://localhost:6000']
+const slaves = process.env.SLAVE_IPS.split(',').filter(IP => IP !== '');
 // 35.190.201.121
+
+console.log(slaves);
 
 const checkAvailableServer = () => new Promise(async(resolve, reject) => {
     let index = 0;

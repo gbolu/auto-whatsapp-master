@@ -14,9 +14,12 @@ const port = process.env.PORT || 4000;
 
 const server = createServer(app);
 
+(async () => {
+  cleanDispenserQueue().then(() => console.log("Cleaned!")).catch(err => console.error(err));
+})()
+
 server.listen(port, () => {
   console.log(`Master Server is listening on port:${port}`);
-  cleanDispenserQueue().then(() => console.log("Cleaned!"));
 })
 
 process.on('unhandledRejection', (err) => {
