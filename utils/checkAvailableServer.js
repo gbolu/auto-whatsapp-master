@@ -11,14 +11,17 @@ const checkAvailableServer = () => new Promise(async(resolve, reject) => {
     let isAvailable = false;
     
     while(isAvailable === false && index < slaves.length){
+        let response;
         try {
-            let resp1 = await axios.get(`${slaves[index]}/isAvailable`)
-            if(resp1.data.data.isAvailable === true){
-                isAvailable = (slaves[index]);
-                break;
-            }
+            response = await axios.get(`${slaves[index]}/isAvailable`)
         } catch (error) {
             console.log(error);
+        }
+
+        if(response && response.data.data.isAvailable === true)
+        {
+            isAvailable = (slaves[index]);
+            break;
         }
 
         index += 1;
