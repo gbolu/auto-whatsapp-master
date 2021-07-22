@@ -1,6 +1,7 @@
 const Queue = require('bull');
 require('dotenv').config();
 const processor = require('./process');
+const generateServer = require('./generateServer');
 
 const dispenserQueue = new Queue("Dispenser", {
   redis: { port: process.env.REDIS_PORT || 6379, host: "127.0.0.1" },
@@ -31,6 +32,16 @@ activeQueues.forEach((handler) => {
   const queue = handler.queue;
   const processor = handler.processor;
   queue.process(processor); 
+
+  queue.on("failed", (job, err) => {
+    logger.error(err);
+    
+    job.remove()
+    .then(async () => {
+      await queue.add(job.data, {lifo: true});
+    })
+    .catch(err => logger.error(err));
+  })
 
   logger.info(`Processing ${queue.name}...`);
 });
