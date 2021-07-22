@@ -1,5 +1,5 @@
 const axios = require('axios').default;
-
+const logger = require('./logger');
 const slaves = process.env.SLAVE_IPS.split(',').filter(IP => IP !== '');
 // 35.190.201.121
 
@@ -18,17 +18,20 @@ const checkAvailableServer = () => new Promise(async(resolve, reject) => {
         }
 
         try {
+            logger.info(`Trying slave: ${slaves[index]}`)
             response = await axios.get(`${slaves[index]}/isAvailable`)
         } catch (error) {
-            console.log(error.message);
+            logger.warn(error.message);
         }
 
         if(response && response.data.data.isAvailable === true)
         {
             isAvailable = (slaves[index]);
+            index = 0;
             break;
         }
 
+        logger.info(`Slave Server : ${slaves[index]} is not available ...`)
         index += 1;
     }
 

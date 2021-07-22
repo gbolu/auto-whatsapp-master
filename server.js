@@ -2,6 +2,7 @@ require('dotenv').config();
 const { createServer } = require('http');
 const app = require('./app');
 const cleanDispenserQueue = require('./utils/cleanDispenserQueue');
+const logger = require('./utils/logger');
 
 // HANDLING UNCAUGHT EXCEPTION ERRORS
 process.on('uncaughtException', (err) => {
@@ -15,11 +16,13 @@ const port = process.env.PORT || 4000;
 const server = createServer(app);
 
 (async () => {
-  cleanDispenserQueue().then(() => console.log("Cleaned!")).catch(err => console.error(err));
+  cleanDispenserQueue()
+  .then(() => console.log("Cleaned!"))
+  .catch(err => console.error(err));
 })()
 
 server.listen(port, () => {
-  console.log(`Master Server is listening on port:${port}`);
+  logger.info(`Master Server is listening on port: ${port}`);
 })
 
 process.on('unhandledRejection', (err) => {

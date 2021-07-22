@@ -1,5 +1,6 @@
 const axios = require("axios").default;
 const checkAvailableServer = require('../utils/checkAvailableServer');
+const logger = require('./logger');
 
 const processor = function(job, done) {
     return checkAvailableServer()
@@ -7,7 +8,7 @@ const processor = function(job, done) {
         if(isAvailable !== false){
             axios.post(`${isAvailable}/addJob`, job.data)
             .then(response => {
-                console.log(`Job ${job.id} dispensed to slave: ${isAvailable}!`);
+                logger.info(`Job ${job.id} dispensed to slave: ${isAvailable} 🙂 !`);
                 return;
             })
             .catch(err => {
@@ -15,7 +16,6 @@ const processor = function(job, done) {
             });
         }
 
-        console.log("Reached!");
         done(null);
     })
     .catch(err => done(err));
