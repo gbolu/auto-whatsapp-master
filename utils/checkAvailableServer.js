@@ -10,12 +10,17 @@ const checkAvailableServer = () => new Promise(async(resolve, reject) => {
 
     let isAvailable = false;
     
-    while(isAvailable === false && index < slaves.length){
+    while(isAvailable === false){
         let response;
+
+        if(index === slaves.length){
+            index = 0;
+        }
+
         try {
             response = await axios.get(`${slaves[index]}/isAvailable`)
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
         }
 
         if(response && response.data.data.isAvailable === true)
@@ -25,10 +30,6 @@ const checkAvailableServer = () => new Promise(async(resolve, reject) => {
         }
 
         index += 1;
-
-        if(isAvailable === false && index === slaves.length - 1){
-            index = 0;
-        }
     }
 
     resolve(isAvailable);
