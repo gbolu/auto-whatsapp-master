@@ -6,8 +6,8 @@ const logger = require('./utils/logger');
 
 // HANDLING UNCAUGHT EXCEPTION ERRORS
 process.on('uncaughtException', (err) => {
-  console.log('UNCAUGHT EXCEPTION! 🙄 Shutting down...');
-  console.error(err.name, err.message);
+  logger.error('UNCAUGHT EXCEPTION! 🙄 Shutting down...');
+  logger.error(err.name, err.message);
   process.exit(1);
 });
 
@@ -17,7 +17,7 @@ const server = createServer(app);
 
 (async () => {
   cleanDispenserQueue()
-  .then(() => console.log("Cleaned!"))
+  .then(() => logger.info("Dispenser Queue Cleaned!"))
   .catch(err => console.error(err));
 })()
 
@@ -27,7 +27,7 @@ server.listen(port, () => {
 
 process.on('unhandledRejection', (err) => {
   console.error(err.name, err.message);
-  console.log('UNHANDLED REJECTION! 😞 Shutting down Server...');
+  logger.error('UNHANDLED REJECTION! 😞 Shutting down Server...');
   server.close(() => {
     process.exit(1);
   });

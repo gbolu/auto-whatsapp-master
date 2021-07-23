@@ -1,6 +1,9 @@
 const { default: axios } = require('axios');
 const express = require('express');
 const dispenserQueue = require('./utils/dispenserQueue');
+const logger = require('./utils/logger');
+
+const slaveServers = process.env.SLAVE_IPS.split(',').filter(IP => (IP != '') || IP != ' ');
 
 const app = express();
 
@@ -21,13 +24,12 @@ app.post('/', async(req, res, next) => {
   try {
     await dispenserQueue.add({ id, message, phone_number });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     return res.status(500).end();
   }
 
   let queueCount = 0;
 
-  let slaveServers = process.env.SLAVE_IPS.split(',').filter(IP => (IP != '') || IP != ' ');
   let slaveServerQueueCountPromises = slaveServers.map(IP => {
     return new Promise(async (resolve) => {
       let count;
@@ -35,7 +37,7 @@ app.post('/', async(req, res, next) => {
         let response = await axios.get(`${IP}/queue/count`);
         count = response.data.count;
       } catch (error) {
-        console.log(error.message);
+        logger.error(error.message);
       }
       
       resolve(count);
@@ -49,7 +51,6 @@ app.post('/', async(req, res, next) => {
 
     return acc;
   });
-  console.log(queueCount);
 
   res.status(200).json({
     code: res.statusCode,

@@ -10,7 +10,7 @@ const processor = function(job, done) {
         done(null);
     })
     .catch(err => {
-        console.log(err.message);
+        logger.error(err.message);
         done(new Error(err.message))
     });
 };
