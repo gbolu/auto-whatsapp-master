@@ -1,4 +1,4 @@
-git statrconst slaves = process.env.SLAVE_IPS.split(',').filter(IP => IP !== '');
+const slaves = process.env.SLAVE_IPS.split(',').filter(IP => IP !== '');
 
 const generateServer = function*(arr=[]) {
   for(let i = 0; ; i++){

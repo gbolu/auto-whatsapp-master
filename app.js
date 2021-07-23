@@ -1,3 +1,4 @@
+const { default: axios } = require('axios');
 const express = require('express');
 const dispenserQueue = require('./utils/dispenserQueue');
 
@@ -24,7 +25,31 @@ app.post('/', async(req, res, next) => {
     return res.status(500).end();
   }
 
-  const queueCount = await dispenserQueue.count();
+  let queueCount = 0;
+
+  let slaveServers = process.env.SLAVE_IPS.split(',').filter(IP => (IP != '') || IP != ' ');
+  let slaveServerQueueCountPromises = slaveServers.map(IP => {
+    return new Promise(async (resolve) => {
+      let count;
+      try {
+        let response = await axios.get(`${IP}/queue/count`);
+        count = response.data.count;
+      } catch (error) {
+        console.log(error.message);
+      }
+      
+      resolve(count);
+    })
+  });
+  
+  let countResults = await Promise.all(slaveServerQueueCountPromises);
+  queueCount = countResults.reduce((acc, curr) => {    
+    if(curr)
+    return acc + curr;
+
+    return acc;
+  });
+  console.log(queueCount);
 
   res.status(200).json({
     code: res.statusCode,
