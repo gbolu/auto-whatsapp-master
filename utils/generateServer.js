@@ -1,19 +1,8 @@
-const mainSlaves = process.env.SLAVE_IPS.split(',').filter(IP => IP !== '');
-const backupSlaves = process.env.BACKUP_SLAVE_IPS.split(',').filter(IP => IP !== '');
+
 const axios = require('axios').default;
 const logger = require('./logger');
 
-const totalSlaves = [...mainSlaves.map(slave => {
-  return {
-    type: 'Main',
-    server: slave
-  }
-}), ...backupSlaves.map(slave => {
-  return {
-    type: 'Backup',
-    server: slave
-  }
-})];
+const { slaveServers } = require('./config');
 
 const getAvailableServer = async function*(arr=[]) {
   for(let i = 0; ; i++){        
@@ -39,6 +28,6 @@ const getAvailableServer = async function*(arr=[]) {
   }
 }
 
-const serverGenerator = getAvailableServer(totalSlaves);
+const serverGenerator = getAvailableServer(slaveServers);
 
 module.exports = serverGenerator;

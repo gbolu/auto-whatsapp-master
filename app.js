@@ -3,7 +3,7 @@ const express = require('express');
 const dispenserQueue = require('./utils/dispenserQueue');
 const logger = require('./utils/logger');
 
-const slaveServers = process.env.SLAVE_IPS.split(',').filter(IP => (IP != '') || IP != ' ');
+const { slaveServers }= require('./utils/config');
 
 const app = express();
 
@@ -28,29 +28,29 @@ app.post('/', async(req, res, next) => {
     return res.status(500).end();
   }
 
-  // let queueCount = 0;
+  let queueCount = 0;
 
-  // let slaveServerQueueCountPromises = slaveServers.map(IP => {
-  //   return new Promise(async (resolve) => {
-  //     let count;
-  //     try {
-  //       let response = await axios.get(`${IP}/queue/count`);
-  //       count = response.data.count;
-  //     } catch (error) {
-  //       logger.error(error.message);
-  //     }
+  let slaveServerQueueCountPromises = slaveServers.map(slave => {
+    return new Promise(async (resolve) => {
+      let count;
+      try {
+        let response = await axios.get(`${slave.server}/queue/count`);
+        count = response.data.count;
+      } catch (error) {
+        logger.error(error.message);
+      }
       
-  //     resolve(count);
-  //   })
-  // });
+      resolve(count);
+    })
+  });
   
-  // let countResults = await Promise.all(slaveServerQueueCountPromises);
-  // queueCount = countResults.reduce((acc, curr) => {    
-  //   if(curr)
-  //   return acc + curr;
+  let countResults = await Promise.all(slaveServerQueueCountPromises);
+  queueCount = countResults.reduce((acc, curr) => {    
+    if(curr)
+    return acc + curr;
 
-  //   return acc;
-  // });
+    return acc;
+  });
 
   res.status(200).json({
     code: res.statusCode,
