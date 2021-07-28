@@ -34,13 +34,13 @@ activeQueues.forEach((handler) => {
   queue.process(processor); 
 
   queue.on("failed", (job, err) => {
-    logger.error(err);
+    // logger.error(err);
     
     job.remove()
     .then(async () => {
       await queue.add(job.data, {lifo: true});
     })
-    .catch(err => logger.error(err));
+    .catch(err => logger.info(err));
   })
 
   logger.info(`Processing ${queue.name}...`);
