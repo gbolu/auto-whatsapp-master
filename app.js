@@ -58,7 +58,7 @@ app.post('/', async(req, res, next) => {
     status: "success",
     data: {
       id,
-      queueCount: 0,
+      queueCount,
       message,
       phone_number,
     },
